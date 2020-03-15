@@ -42,21 +42,48 @@ def alg(l, D, c, alpha, T, I, K):
         for i in np.arange(len(x) - 2, -1, -1):
             values[i] = coefficients_a[i] * values[i + 1] + coefficients_b[i]
 
-    charts(values, x)
-    return values
+
+    values_anal = analitick(l, D, c, alpha, T, I)
+    charts(values, x, values_anal)
+
+    # расчёт погрешности
+    epsilon = abs(values - values_anal)
+    k = 0
+    for i in range(len(epsilon)):
+        max_epsilon = max(epsilon)
+        k = i
+    print(max_epsilon, " ", i)
 
 
-def charts(values_y, values_x ):
+
+def charts(values_y_alg, values_x, values_y_anal ):
     plt.title("Динамическое поле концентрации в трубке")
-    plt.xlabel("длина стержня, l")
+    plt.xlabel("длина трубки, l")
     plt.ylabel("u(x,t)")
+    plt.plot(values_x, values_y_alg, color = 'red', label = "Численное решение")
+    plt.plot(values_x, values_y_anal, color = 'blue', label = "Аналитическое решение")
     plt.grid()
-    plt.legend("Неявная схема")
-    plt.plot(values_x, values_y, color = 'red')
+    plt.legend()
     plt.show()
 
+
+
+def analitick(l, D, C, alpha, T, I):
+    k = 1
+    h_x = l / I
+    x = np.arange(0, l + h_x, h_x)
+    X_k = np.cos(np.pi * x * k / l)
+    temp = T * ((alpha / C) * (np.pi * k / l) ** 2 + D / C)
+    T_k = np.exp(-temp)
+    A_k = (l/2)
+    u =  X_k * T_k *A_k
+    return u
+
 if __name__ == "__main__":
-    print(alg(2, 0.02, 0.8, 0.24,  10, 25, 200))
+    l, D, c, alpha, T, I, K = 4, 0.002, 1.5, 0.08,  10, 64, 512
+    alg(l, D, c, alpha, T, I, K )
+
+    #T = 10, измельчать сетку пока они почти не совпадут
 
 
 
