@@ -58,10 +58,11 @@ class App(QMainWindow):
         self.enter_I.move(300, 260)
         self.enter_K = QLineEdit(self)
         self.enter_K.move(300, 300)
-        self.button = QPushButton('Расчитать', self)
+        self.button = QPushButton('Рассчитать', self)
         self.button.move(20, 360)
         self.button.clicked.connect(self.on_click)
         self.show()
+
 
     @pyqtSlot()
     def on_click(self):
@@ -70,15 +71,12 @@ class App(QMainWindow):
         c_value = float(self.enter_C.text())
         alpha_value = float(self.enter_alpha.text())
         T_value = float(self.enter_T.text())
-        I_value = float(self.enter_I.text())
-        K_value = float(self.enter_K.text())
-
+        I_value = int(self.enter_I.text())
+        K_value = int(self.enter_K.text())
         start.alg(l_value, D_value, c_value, alpha_value, T_value, I_value, K_value)
 
 
-
 if __name__ == "__main__":
-
     app = QApplication(sys.argv)
     ex = App()
     sys.exit(app.exec_())
